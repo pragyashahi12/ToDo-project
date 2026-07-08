@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Todo App</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #74ebd5, #acb6e5);
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 420px;
+            margin: 60px auto;
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0px 10px 25px rgba(0,0,0,0.2);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        /* Input box */
+        .task-form {
+            display: flex;
+            gap: 10px;
+        }
+
+        .task-form input {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .task-form input:focus {
+            border-color: #6c63ff;
+        }
+
+        .task-form button {
+            padding: 10px 15px;
+            border: none;
+            background: #6c63ff;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .task-form button:hover {
+            background: #5548d9;
+        }
+
+        /* Task card */
+        .task {
+            background: #f9f9f9;
+            padding: 12px;
+            margin-top: 12px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: 0.3s;
+        }
+
+        .task:hover {
+            transform: scale(1.02);
+            background: #f1f1f1;
+        }
+
+        .task span {
+            font-size: 16px;
+        }
+
+        .done {
+            text-decoration: line-through;
+            color: gray;
+        }
+
+        /* Buttons */
+        .actions a {
+            text-decoration: none;
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            margin-left: 5px;
+            color: white;
+        }
+
+        .edit {
+            background: #3498db;
+        }
+
+        .delete {
+            background: #e74c3c;
+        }
+
+        .edit:hover {
+            background: #2980b9;
+        }
+
+        .delete:hover {
+            background: #c0392b;
+        }
+
+        /* Empty state */
+        .empty {
+            text-align: center;
+            color: gray;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>📝 My Todo List</h1>
+
+    <!-- Add Task Form -->
+    <form method="POST" class="task-form">
+        {% csrf_token %}
+        {{ form.title }}
+        <button type="submit">Add</button>
+    </form>
+
+    <!-- Tasks -->
+    {% for task in tasks %}
+        <div class="task">
+            <span class="{% if task.completed %}done{% endif %}">
+                {{ task.title }}
+            </span>
+
+            <div class="actions">
+                <a class="edit" href="{% url 'update' task.id %}">Edit</a>
+                <a class="delete" href="{% url 'delete' task.id %}">Delete</a>
+            </div>
+            
+        </div>
+    {% empty %}
+        <p class="empty">No tasks yet 🚀 Add your first task</p>
+    {% endfor %}
+</div>
+
+</body>
+</html>
